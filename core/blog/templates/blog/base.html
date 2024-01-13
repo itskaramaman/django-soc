@@ -25,10 +25,24 @@
         <li><a href="{% url 'blog-about' %}">About</a></li>
       </div>
       <div class="flex gap-5 items-center">
-        <li>Login</li>
-        <li>Register</li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        <li><a href="{% url 'register' %}">Register</a></li>
       </div>
     </nav>
+    
+    
+    {% if messages %}
+      <section class="w-full mt-16"></section>
+        <div class="w-6/12 text-center mx-auto bg-blue-300 my-2 p-3">
+          {% for message in messages %}
+            {{message}}
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  
+      
+    
     <section class="m-10 mt-32 flex justify-between">
       <div class="w-9/12">{% block content %} {% endblock %}</div>
       <div class="w-3/12">
