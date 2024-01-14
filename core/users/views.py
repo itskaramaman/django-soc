@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserRegisterForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 def register(request):
@@ -21,5 +22,5 @@ def register(request):
 
 @login_required
 def profile(request):
-    print(request.user.is_authenticated)
+    print(request.user.profile.image.url)
     return render(request, "users/profile.html")
