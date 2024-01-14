@@ -3,8 +3,19 @@
 <ul>
   {% for blog in blogs %}
   <li class="border rounded-md mb-5 p-5 shadow">
-    <h2 class="text-2xl font-semibold">{{blog.title}}</h2>
-    <p>{{blog.description}}</p>
+    <section class="flex gap-5 items-start">
+      <img
+        class="rounded-full w-3/12 h-[40px] w-[40px]"
+        src="{{ blog.author.profile.image.url }}"
+        alt="user-thumbnail"
+      />
+      <div class="w-9/12">
+        <a href="{% url 'blog' blog.id %}" class="text-2xl font-semibold"
+          >{{blog.title}}</a
+        >
+        <p>{{blog.description}}</p>
+      </div>
+    </section>
     <hr class="my-1" />
     <div class="flex justify-between">
       <small class="text-blue-500 cursor-pointer">{{blog.author}}</small>
