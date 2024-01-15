@@ -1,4 +1,4 @@
-{% extends "blog/base.html" %} {% block content %}
+{% extends "blog/base.html" %} {% load static %}{% block content %}
 <div class="border rounded-md mb-5 p-5 shadow">
   <section class="flex gap-5 items-start">
     <img
@@ -16,5 +16,19 @@
     <small class="text-blue-500 cursor-pointer">{{blog.author}}</small>
     <small>{{blog.created_at|date:'F d, Y'}}</small>
   </div>
+  {% if user == blog.author %}
+  <hr class="my-1" />
+  <div class="flex justify-between mt-2">
+    <a href="{% url 'blog-update' blog.id %}"
+      ><img class="h-5" src="{% static 'blog/create-outline.svg' %}" alt="edit"
+    /></a>
+    <a href="{% url 'blog-delete' blog.id %}"
+      ><img
+        class="h-5"
+        src="{% static 'blog/trash-outline.svg' %}"
+        alt="delete"
+    /></a>
+  </div>
+  {% endif %}
 </div>
 {% endblock content %}

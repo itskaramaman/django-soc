@@ -1,7 +1,13 @@
-from typing import Any
 from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Blog
-from django.views.generic import ListView, DetailView
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 
 
 def home(request):
@@ -21,9 +27,37 @@ class BlogDetailView(DetailView):
     template_name = 'blog/blog.html'
 
 
-def blog(request, id):
-    blog = Blog.objects.filter(id=id)
-    return render(request, 'blog/home.html', {'blogs': blog})
+class BlogCreateView(LoginRequiredMixin, CreateView):
+    model = Blog
+    fields = ['title', 'description']
+    template_name = 'blog/edit-blog.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class BlogUpdateView(LoginRequiredMixin,  UserPassesTestMixin, UpdateView):
+    model = Blog
+    fields = ['title', 'description']
+    template_name = 'blog/edit-blog.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self) -> bool | None:
+        blog = self.get_object()
+        return self.request.user == blog.author
+
+
+class BlogDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Blog
+    success_url = '/'
+
+    def test_func(self) -> bool | None:
+        blog = self.get_object()
+        return self.request.user == blog.author
 
 
 def about(request):

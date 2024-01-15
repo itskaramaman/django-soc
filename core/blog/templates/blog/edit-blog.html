@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %} {% load tailwind_filters %} {% block content %}
+
+<form method="POST">
+  {% csrf_token %}
+  <div class="border rounded-md mb-5 p-5 shadow">
+    <h1 class="text-3xl">Blog Post</h1>
+    <hr class="my-2" />
+    {{form|crispy}}
+    <div class="flex justify-end">
+      <button
+        class="bg-blue-500 hover:bg-blue-600 px-2 py-1 text-white rounded-md"
+        type="submit"
+      >
+        Save Blog
+      </button>
+    </div>
+  </div>
+</form>
+{% endblock content %}

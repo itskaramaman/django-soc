@@ -1,0 +1,27 @@
+{% extends "blog/base.html" %} {% load tailwind_filters %} {% block content %}
+
+<form method="POST">
+  {% csrf_token %}
+  <div class="border rounded-md mb-5 p-5 shadow">
+    <h1 class="text-xl">
+      Are you sure you want to delete the blog {{object.title}}
+    </h1>
+    <hr class="my-2" />
+    {{form|crispy}}
+    <div class="flex gap-5">
+      <button
+        class="bg-red-500 hover:bg-red-600 px-2 py-1 text-white rounded-md"
+        type="submit"
+      >
+        Delete Blog
+      </button>
+      <a
+        class="bg-blue-500 hover:bg-blue-600 px-2 py-1 text-white rounded-md"
+        href="{% url 'blog' object.id %}"
+      >
+        Cancel
+      </a>
+    </div>
+  </div>
+</form>
+{% endblock content %}
