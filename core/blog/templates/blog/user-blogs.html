@@ -1,5 +1,5 @@
 {% extends "blog/base.html" %} {% block content %}
-<h1 class="text-3xl font-medium mb-10">All Blogs</h1>
+<h1 class="text-3xl font-medium mb-10">Blogs by: {{view.kwargs.username}} ({{page_obj.paginator.count}})</h1>
 <ul>
   {% for blog in blogs %}
   <li class="border rounded-md mb-5 p-5 shadow">
@@ -18,7 +18,7 @@
     </section>
     <hr class="my-1" />
     <div class="flex justify-between">
-      <small class="text-blue-500 cursor-pointer"><a href="{% url 'blog-user-list' blog.author %}" >{{blog.author}}</a></small>
+      <small class="text-blue-500 cursor-pointer">{{blog.author}}</small>
       <small>{{blog.created_at|date:'F d, Y'}}</small>
     </div>
   </li>

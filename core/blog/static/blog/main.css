@@ -11,3 +11,7 @@ h1 {
 li {
   list-style-type: none;
 }
+
+body {
+  scroll-behavior: smooth;
+}
