@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from dotenv import load_dotenv
 
+
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#5oqywuzu1(l2a6(=o8+h1i1-tpd(n-yur$c))lalzfw5i=5_7"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv('DEBUG', False))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", '127.0.0.1').split(" ")
 
 
 # Application definition
@@ -86,8 +89,7 @@ DATABASES = {
     }
 }
 
-DATABASES['default'] = dj_database_url.parse(
-    "postgres://django_soc_render_user:17hgqjPxYnjjzOYIRmR4JcQvCDr72H6a@dpg-cmjdbqq1hbls73cig7s0-a.oregon-postgres.render.com/django_soc_render")
+DATABASES['default'] = dj_database_url.parse(os.getenv('DATABASE_URL'))
 
 
 # Password validation
