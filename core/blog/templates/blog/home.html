@@ -1,6 +1,13 @@
 {% extends "blog/base.html" %} {% block content %}
-<h1 class="text-3xl font-medium mb-10">All Blogs</h1>
-<ul>
+<h1 class="text-3xl font-medium mb-5">All Blogs</h1>
+
+<form method="POST" action="{% url 'blog-search' %}" class="mb-5 w-full p-5 bg-slate-100">
+  {% csrf_token %}
+  <input type="text" name="search-query" placeholder="Search for a blog" class="p-1 w-10/12" />
+  <button class="border bg-blue-500 hover:bg-blue-600 rounded-md text-white py-1 px-2" type="submit">Search</button>
+</form>
+
+  <ul>
   {% for blog in blogs %}
   <li class="border rounded-md mb-5 p-5 shadow">
     <section class="flex gap-5 items-start">

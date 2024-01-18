@@ -8,5 +8,6 @@ urlpatterns = [
     path('update/<int:pk>/', views.BlogUpdateView.as_view(), name="blog-update"),
     path('delete/<int:pk>/', views.BlogDeleteView.as_view(), name="blog-delete"),
     path('blogs/users/<str:username>/', views.UserBlogListView.as_view(), name="blog-user-list"),
+    path('search/', views.search, name="blog-search"),
     path('about/', views.about, name="blog-about")
 ]

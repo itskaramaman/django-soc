@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.postgres.search import SearchQuery, SearchVector
 from .models import Blog
 from django.contrib.auth.models import User
 from django.views.generic import (
@@ -73,5 +74,19 @@ class BlogDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == blog.author
 
 
+def search(request):
+    if request.method == 'POST':
+        search_query = request.POST.get('search-query')
+        if search_query:
+            vector = SearchVector('title', weight='A') + \
+                     SearchVector('description', weight='B')
+            query = SearchQuery(search_query)
+            hits = Blog.objects.annotate(search=vector).filter(search=query)
+        return render(request, 'blog/home.html', {'blogs': hits})
+    return render(request, 'blog/about.html')
+
+
 def about(request):
     return render(request, 'blog/about.html')
+
+
