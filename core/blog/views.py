@@ -1,5 +1,6 @@
 from typing import Any
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.postgres.search import SearchQuery, SearchVector
@@ -99,7 +100,7 @@ def search(request):
 @login_required
 def blog_like_update(request):
     if request.method == 'POST':
-        blog_id = request.POST.get('blog_id')
+        blog_id = request.POST.get('blogId')
         blog = get_object_or_404(Blog, id=blog_id)
         liked = False
         # check if blog like exists
@@ -114,7 +115,16 @@ def blog_like_update(request):
             BlogLike.objects.create(blog=blog, user=request.user)
             liked = True
 
-        return render(request, 'blog/blog.html', {"blog": blog, "liked": liked})
+        return JsonResponse(
+            {
+                "blog": {
+                    'id': blog.id,
+                    'title': blog.title,
+                    'description': blog.description
+                },
+                "liked": liked
+            }
+        )
 
     return redirect('/')
 
