@@ -14,3 +14,11 @@ class Blog(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog', kwargs={'pk': self.pk})
+
+
+class BlogLike(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f'{self.blog.title}: {self.user.username}'

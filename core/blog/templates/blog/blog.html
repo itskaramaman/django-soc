@@ -12,9 +12,25 @@
     </div>
   </section>
   <hr class="my-1" />
-  <div class="flex justify-between">
-    <small class="text-blue-500 cursor-pointer">{{blog.author}}</small>
-    <small>{{blog.created_at|date:'F d, Y'}}</small>
+  <div class="flex justify-between items-center">
+    <div class="flex items-center">
+      <form method="POST" action="{% url 'blog-like-update' %}">
+        {% csrf_token %}
+        <input type="hidden" name="blog_id" value="{{ blog.id }}">
+        <button class="mt-1" type="submit">
+        {% if liked %}
+          <img class="h-5 cursor-pointer" src="{% static 'blog/img/heart.svg' %}" alt="like" />
+        {% else %}
+            <img class="h-5 cursor-pointer" src="{% static 'blog/img/heart-outline.svg' %}" alt="like-outline" />
+        {% endif %}
+      </button>
+      </form>
+      <small class="text-blue-500">{{blog.bloglike_set.count}} likes</small>
+    </div>
+    <div>
+      <small class="text-blue-500 cursor-pointer">{{blog.author}}</small>
+      <small>{{blog.created_at|date:'F d, Y'}}</small>
+    </div>
   </div>
   {% if user == blog.author %}
   <hr class="my-1" />

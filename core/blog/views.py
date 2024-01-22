@@ -1,7 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from typing import Any
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.postgres.search import SearchQuery, SearchVector
-from .models import Blog
+from .models import Blog, BlogLike
 from django.contrib.auth.models import User
 from django.views.generic import (
     ListView,
@@ -39,6 +41,14 @@ class UserBlogListView(ListView):
 class BlogDetailView(DetailView):
     model = Blog
     template_name = 'blog/blog.html'
+
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
+        context['liked'] = BlogLike.objects.filter(
+            blog=context['blog'],
+            user=self.request.user
+        ).first()
+        return context
 
 
 class BlogCreateView(LoginRequiredMixin, CreateView):
@@ -86,7 +96,28 @@ def search(request):
     return render(request, 'blog/about.html')
 
 
+@login_required
+def blog_like_update(request):
+    if request.method == 'POST':
+        blog_id = request.POST.get('blog_id')
+        blog = get_object_or_404(Blog, id=blog_id)
+        liked = False
+        # check if blog like exists
+        blog_like = BlogLike.objects.filter(
+            blog=blog,
+            user=request.user
+        ).first()
+
+        if blog_like:
+            blog_like.delete()
+        else:
+            BlogLike.objects.create(blog=blog, user=request.user)
+            liked = True
+
+        return render(request, 'blog/blog.html', {"blog": blog, "liked": liked})
+
+    return redirect('/')
+
+
 def about(request):
     return render(request, 'blog/about.html')
-
-
